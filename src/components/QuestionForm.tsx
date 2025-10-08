@@ -1,7 +1,7 @@
 'use client';
 
-import { useFormState, useFormStatus } from 'react-dom';
-import { useEffect, useRef } from 'react';
+import { useActionState, useEffect, useRef } from 'react';
+import { useFormStatus } from 'react-dom';
 import { submitQuestion } from '@/app/actions';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -19,7 +19,7 @@ const SubmitButton = () => {
 };
 
 const QuestionForm = () => {
-  const [state, formAction] = useFormState(submitQuestion, { message: '', success: false });
+  const [state, formAction] = useActionState(submitQuestion, { message: '', success: false });
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
 
