@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { collection, query, orderBy, onSnapshot, Timestamp } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { useFirebase } from '@/firebase/provider';
 import QuestionCard from './QuestionCard';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -13,6 +13,7 @@ export interface Question {
 }
 
 const QuestionList = () => {
+  const { db } = useFirebase();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -37,7 +38,7 @@ const QuestionList = () => {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [db]);
 
   if (isLoading) {
     return (
