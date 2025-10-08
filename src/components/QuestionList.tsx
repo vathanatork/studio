@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { collection, query, orderBy, onSnapshot, Timestamp } from 'firebase/firestore';
+import { collection, query, orderBy, onSnapshot, Timestamp, where, Query } from 'firebase/firestore';
 import { useFirebase } from '@/firebase/provider';
 import QuestionCard from './QuestionCard';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -9,10 +9,11 @@ import { Skeleton } from '@/components/ui/skeleton';
 export interface Question {
   id: string;
   text: string;
+  eventId: string;
   createdAt: Timestamp;
 }
 
-const QuestionList = () => {
+const QuestionList = ({ eventId }: { eventId: string | null }) => {
   const { db } = useFirebase();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -23,8 +24,19 @@ const QuestionList = () => {
         setIsLoading(false);
         return;
     }
+    
+    if (!eventId) {
+        setQuestions([]);
+        setIsLoading(false);
+        return;
+    }
 
-    const q = query(collection(db, 'questions'), orderBy('createdAt', 'desc'));
+    const q = query(
+        collection(db, 'questions'), 
+        where('eventId', '==', eventId),
+        orderBy('createdAt', 'desc')
+    );
+
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const questionsData: Question[] = querySnapshot.docs.map(doc => ({
         id: doc.id,
@@ -38,7 +50,7 @@ const QuestionList = () => {
     });
 
     return () => unsubscribe();
-  }, [db]);
+  }, [db, eventId]);
 
   if (isLoading) {
     return (
@@ -49,12 +61,21 @@ const QuestionList = () => {
       </div>
     );
   }
+  
+  if (!eventId) {
+      return (
+        <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground p-8 rounded-lg border-2 border-dashed bg-card/50">
+          <p className="text-lg font-medium">No event selected.</p>
+          <p>Click "New Event" to get started.</p>
+        </div>
+      );
+  }
 
   return (
     <div className="h-full flex flex-col">
       {questions.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground p-8 rounded-lg border-2 border-dashed bg-card/50">
-          <p className="text-lg font-medium">No questions yet.</p>
+          <p className="text-lg font-medium">No questions yet for this event.</p>
           <p>Be the first one to ask!</p>
         </div>
       ) : (

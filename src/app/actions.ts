@@ -7,6 +7,7 @@ import { revalidatePath } from 'next/cache';
 
 const questionSchema = z.object({
   question: z.string().min(10, "Question must be at least 10 characters long.").max(500, "Question must be at most 500 characters long."),
+  eventId: z.string().optional(),
 });
 
 export type FormState = {
@@ -24,6 +25,7 @@ export async function submitQuestion(prevState: FormState, formData: FormData): 
 
   const validatedFields = questionSchema.safeParse({
     question: formData.get('question'),
+    eventId: formData.get('eventId'),
   });
 
   if (!validatedFields.success) {
@@ -36,6 +38,7 @@ export async function submitQuestion(prevState: FormState, formData: FormData): 
   try {
     await addDoc(collection(db, 'questions'), {
       text: validatedFields.data.question,
+      eventId: validatedFields.data.eventId || null,
       createdAt: serverTimestamp(),
     });
     

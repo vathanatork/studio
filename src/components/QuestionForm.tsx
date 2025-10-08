@@ -18,7 +18,7 @@ const SubmitButton = () => {
   );
 };
 
-const QuestionForm = () => {
+const QuestionForm = ({ eventId }: { eventId: string }) => {
   const [state, formAction] = useActionState(submitQuestion, { message: '', success: false });
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
@@ -43,6 +43,7 @@ const QuestionForm = () => {
 
   return (
     <form ref={formRef} action={formAction} className="space-y-4">
+      <input type="hidden" name="eventId" value={eventId} />
       <div>
         <Textarea
           name="question"

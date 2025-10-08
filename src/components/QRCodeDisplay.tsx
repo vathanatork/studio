@@ -9,9 +9,9 @@ import { useOrigin } from '@/lib/hooks/use-origin';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from './ui/skeleton';
 
-const QRCodeDisplay = () => {
+const QRCodeDisplay = ({ eventId }: { eventId: string }) => {
   const origin = useOrigin();
-  const askUrl = origin ? `${origin}/ask` : '';
+  const askUrl = origin && eventId ? `${origin}/ask?event=${eventId}` : '';
   const [qrCodeUrl, setQrCodeUrl] = useState('');
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const QRCodeDisplay = () => {
         </div>
         <div className="flex items-center gap-2 text-sm text-muted-foreground break-all text-center">
             <Smartphone size={16} />
-            <span>Or go to: <span className="font-semibold text-primary">{askUrl}</span></span>
+            <span className="truncate">Or go to: <span className="font-semibold text-primary">{askUrl}</span></span>
         </div>
       </CardContent>
     </Card>
