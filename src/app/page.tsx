@@ -1,3 +1,4 @@
+
 import FooterAnimation from '@/components/FooterAnimation';
 import QuestionList from '@/components/QuestionList';
 import QRCodeDisplay from '@/components/QRCodeDisplay';
@@ -9,7 +10,7 @@ export default function Home() {
       <header className="p-6 text-center">
         <h1 className="text-4xl sm:text-5xl font-bold text-primary tracking-tight flex items-center justify-center gap-3">
           <Sparkles className="w-8 h-8" />
-          CrowdQuestion
+          chickChat
         </h1>
         <p className="mt-2 text-lg text-muted-foreground">The floor is yours. Ask away!</p>
       </header>
