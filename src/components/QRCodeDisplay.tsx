@@ -46,9 +46,9 @@ const QRCodeDisplay = ({ eventId }: { eventId: string }) => {
                 <Skeleton className="h-[240px] w-[240px]" />
             )}
         </div>
-        <div className="flex items-center gap-2 text-sm text-muted-foreground break-all text-center">
-            <Smartphone size={16} />
-            <span className="truncate">Or go to: <span className="font-semibold text-primary">{askUrl}</span></span>
+        <div className="flex items-center gap-2 text-sm text-muted-foreground w-full">
+            <Smartphone size={16} className="flex-shrink-0" />
+            <span className="truncate">Or go to: <span className="font-semibold text-primary break-all">{askUrl}</span></span>
         </div>
       </CardContent>
     </Card>
