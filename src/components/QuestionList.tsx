@@ -33,8 +33,7 @@ const QuestionList = ({ eventId }: { eventId: string | null }) => {
 
     const q = query(
         collection(db, 'questions'), 
-        where('eventId', '==', eventId),
-        orderBy('createdAt', 'desc')
+        where('eventId', '==', eventId)
     );
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -42,6 +41,14 @@ const QuestionList = ({ eventId }: { eventId: string | null }) => {
         id: doc.id,
         ...doc.data(),
       } as Question));
+      
+      // Sort questions by creation date, newest first
+      questionsData.sort((a, b) => {
+        const dateA = a.createdAt?.toDate()?.getTime() || 0;
+        const dateB = b.createdAt?.toDate()?.getTime() || 0;
+        return dateB - dateA;
+      });
+
       setQuestions(questionsData);
       setIsLoading(false);
     }, (error) => {
